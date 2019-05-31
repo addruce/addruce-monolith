@@ -1,0 +1,16 @@
+version: '2'
+services:
+  addruce-mongodb:
+    image: mongo:4.0.9
+    ports:
+      - '27017:27017'
+    command: mongos --configdb addruce-mongodb-config
+  addruce-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  addruce-mongodb-config:
+    image: mongo:4.0.9
+    container_name: addruce-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
